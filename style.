@@ -1,0 +1,153 @@
+//variavelbolinha
+let xbolinha = 500;
+let ybolinha = 200;
+let diametro = 20;
+
+
+//velocidadebolinha
+let velocidadeXbolinha = 8;
+let velocidadeYbolinha = 8;
+let raio = diametro/2;
+
+//valoriavelraquete
+let xraquete = 6;
+let yraquete = 150;
+
+let colidiu = false;
+
+let alturaraquete = 60;
+let comprimentoraquete= 12;
+
+
+//raqueteop
+let xraqueteop = 570;
+let yraqueteop = 12;
+
+
+//plaacar jogo
+let meuspontos = 0;
+let pontosop = 0;
+
+
+//sonsjogo
+let raquetada;
+let ponto;
+let trilha;
+
+function preload(){
+  trilha = loadSound("01-ate-que-durou-pericles-279819.mp3");
+  ponto = loadSound("ponto-1.mp3");
+  raquetada = loadSound("raquetada.mp3");
+  
+}
+
+
+function setup() {
+    createCanvas(590,400);
+    trilha.loop();
+}
+
+function draw() {
+    background('violet');
+    mostrabolinha();
+    movimentabolinha();
+    verificacaocolisao();
+    mostraraquete(xraquete,yraquete);
+    movimentaraquete();
+    verificacolisaoraquete(xraquete,yraquete);
+    mostraraquete(xraqueteop,yraqueteop);
+    verificacolisaoraquete(xraqueteop,yraqueteop);
+    movimentaraqueteop();
+    incluirplacar();
+    marcapt();
+    bolinhanficapresa();
+    }
+
+
+
+function mostrabolinha(){
+  circle(xbolinha, ybolinha, diametro);
+  
+}
+
+function movimentabolinha(){
+  xbolinha += velocidadeXbolinha;
+  ybolinha += velocidadeYbolinha;
+}
+
+function verificacaocolisao(){
+  if (xbolinha+raio > width || xbolinha-raio < 0) {
+        velocidadeXbolinha *= -1;
+    }
+    if (ybolinha+raio > height || ybolinha-raio < 0) {
+        velocidadeYbolinha *= -1;
+    }
+ }
+
+function mostraraquete(x,y){
+  rect(x,y,comprimentoraquete,alturaraquete);
+}
+
+function movimentaraquete () {
+  if(keyIsDown(UP_ARROW)){
+   yraquete -= 10; 
+  } 
+  if(keyIsDown(DOWN_ARROW)){
+   yraquete += 10; 
+  }
+} 
+
+
+function movimentaraqueteop (){
+   if(keyIsDown(87)){
+   yraqueteop -= 10; 
+  } 
+  if(keyIsDown(83)){
+   yraqueteop += 10; 
+  }
+} 
+
+function verificacolisaocraquete (){
+  if (xbolinha - raio < xraquete + comprimentoraquete && ybolinha - raio < yraquete + alturaraquete && ybolinha + raio > yraquete){
+    velocidadeXbolinha *= -1;
+    raquetada.play();
+  }
+}
+
+function verificacolisaoraquete(x,y){
+  colidiu = collideRectCircle(x,y,comprimentoraquete,alturaraquete,xbolinha,ybolinha,raio);
+  if(colidiu){
+    velocidadeXbolinha *= -1 ;
+    raquetada.play();
+  } 
+}
+function incluirplacar(){
+  fill(color(65,105,225));
+  rect(143,10,40,25);
+  fill(255);
+  text(meuspontos,160,30);
+  fill(color(65,105,225));
+  rect(385,10,40,25);
+  fill(255)
+  text(pontosop,400,30);
+ }
+   
+function marcapt(){
+  if (xbolinha > 580){
+    meuspontos += 1
+    ponto.play();
+  }
+  if (xbolinha < 10){
+    pontosop += 1;
+    ponto.play();
+  } 
+  
+}
+  
+function bolinhanficapresa(){
+  if (xbolinha - raio < 0){
+  xbolinha = 24
+  }
+  
+}
+
